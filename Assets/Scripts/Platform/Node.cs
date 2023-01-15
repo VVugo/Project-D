@@ -6,7 +6,7 @@ public class Node : MonoBehaviour
 {
     private GameManager gameManager;
     public Material myShader;
-    private bool isFocus;
+    private bool isNodeFocus;
 
     private float zMovement;
     private float xMovement;
@@ -17,11 +17,15 @@ public class Node : MonoBehaviour
     }
 
     private void LateUpdate() {
-        if(Move() && !isFocus)
+        if(Move() && !isNodeFocus && !this.gameManager.myPlayer.canAttack)
         {
             gameObject.GetComponent<Renderer>().material.color = new Color(0,1,0,50);
         }
-        else if (!isFocus)
+        else if(Attack() && this.gameManager.myPlayer.canAttack && !isNodeFocus)
+        {
+            gameObject.GetComponent<Renderer>().material.color = new Color(0,0,1,50);
+        }
+        else if (!isNodeFocus)
         {
             gameObject.GetComponent<Renderer>().material.color = myShader.color;
         }
@@ -30,26 +34,39 @@ public class Node : MonoBehaviour
     private void OnMouseEnter() {
         var getPlayerPosition = gameManager.myPlayer.transform.position - new Vector3(0,1,0);
 
-        if(Move() && getPlayerPosition != this.gameObject.transform.position)
+        if(Move() && getPlayerPosition != this.gameObject.transform.position && !this.gameManager.myPlayer.canAttack)
         {
             gameObject.GetComponent<Renderer>().material.color = new Color(105, 103, 0, 1);
-            isFocus = true;
+            isNodeFocus = true;
+        }
+        else if(this.gameManager.myPlayer.canAttack)
+        {
+            isNodeFocus = true;
+            Debug.Log("Player can attack");
         }
     }
 
     private void OnMouseExit() {
         gameObject.GetComponent<Renderer>().material.color = myShader.color;
-        isFocus = false;
+        isNodeFocus = false;
     }
 
     private void OnMouseDown() {
         // Move the player
-        if(Move())
-        {
+        if(Move() && !this.gameManager.myPlayer.canAttack)
+        {   
+            // Ajoute le Node du joueur dans le tableau de Node
+            gameManager.listOfNode.Add(gameManager.myPlayer.transform.position);
+
             // Soustrait le nombre de déplacement autorisé
             gameManager.myPlayer.ActionMovementAllow -= totalMovement;
             gameManager.myPlayer.transform.position = new Vector3(this.transform.position.x, 1, this.transform.position.z);
             gameManager.myPlayer.updateTextActionMovement();
+            gameManager.updateListOfNodes(gameManager.myPlayer.transform.position);
+        }
+        else if(this.gameManager.myPlayer.canAttack)
+        {
+            Debug.Log("Player attack !");
         }
     }
 
@@ -67,4 +84,21 @@ public class Node : MonoBehaviour
             return false;
         }
     }
+
+    private bool Attack()
+    {
+        zMovement = Mathf.Abs(this.gameObject.transform.position.z - gameManager.myPlayer.transform.position.z);
+        xMovement = Mathf.Abs(this.gameObject.transform.position.x - gameManager.myPlayer.transform.position.x);
+
+        totalMovement = zMovement + xMovement;
+        // Vérifie si l'utilisateur peut se déplacer        
+        if(totalMovement <= 1)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 }

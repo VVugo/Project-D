@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private int InitActionMovement = 3;
+    private int ActionMovementAllow;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        ActionMovementAllow = InitActionMovement;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void MoveToPlayer()
     {
         
     }

@@ -349,7 +349,9 @@
 -r:"Library/Bee/artifacts/2400b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/2400b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/Core/Enemy/Enemy.cs"
+"Assets/Scripts/Core/Enemy/EnemySpawner.cs"
 "Assets/Scripts/Core/GameManager.cs"
+"Assets/Scripts/Core/Player/MeleeAttack.cs"
 "Assets/Scripts/Core/Player/Player.cs"
 "Assets/Scripts/Platform/Node.cs"
 -langversion:9.0

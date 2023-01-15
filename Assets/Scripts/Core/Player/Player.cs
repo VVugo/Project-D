@@ -7,12 +7,17 @@ public class Player : MonoBehaviour
 {
     public TMP_Text textActionMovement;
     public int InitActionMovement = 3;
+    public int InitActionAttack = 1;
 
     public float ActionMovementAllow;
+    public float ActionAttackAllow;
     public bool canMove = true;
+    public bool canAttack = false;
 
     private void Start() {
         ActionMovementAllow = InitActionMovement;
+        ActionAttackAllow = InitActionAttack;
+        
         updateTextActionMovement();
     }
 
